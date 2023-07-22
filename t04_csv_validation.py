@@ -17,15 +17,18 @@ Invalid price on line: 224
 
 
 class TextFileReader:
-    def __init__(self, filename, delimiter=';'):
-        self.filename = filename
+    def __init__(self, csv_filename, delimiter=";"):
+        """
+        Validates the library book list in the format: title;author;ISBN;price
+        """
+        self.filename = csv_filename
         self.delimiter = delimiter
         self.file = None
         self.line = None
         self.line_number = 0
 
     def open(self):
-        self.file = open(self.filename, 'r', encoding='utf-8')
+        self.file = open(self.filename, "r", encoding="utf-8")
 
     def read_line(self):
         self.line = self.file.readline()
@@ -33,9 +36,13 @@ class TextFileReader:
         return self.line
 
     def validate(self):
+        """
+        Validates the current loaded row
+        :return: Error text
+        """
         def check_price_format(price):
             import re
-            pattern = r'^\-?\d+([.,]\d{1,2})?\s*(Kč|€)$'
+            pattern = r"^\-?\d+([.,]\d{1,2})?\s*(Kč|€)$"
             match = re.match(pattern, price)
             return bool(match)
 
@@ -57,21 +64,20 @@ class TextFileReader:
             self.file.close()
 
 
-reader = TextFileReader('t04_library.csv')
+reader = TextFileReader("t04_library.csv")
 try:
     reader.open()
     while True:
         if not reader.read_line():
             break
-        # print(f"{reader.line_number} - {reader.line}", end="")
         validate = reader.validate()
         if validate is not None:
             print(f"{validate} on line: {reader.line_number}")
 
 except FileNotFoundError:
-    print('Soubor nebyl nalezen')
+    print("File not found")
 except PermissionError:
-    print('Nemáte oprávnění ke čtení souboru')
+    print("You don't have permission to read the file")
 finally:
     reader.close()
 
