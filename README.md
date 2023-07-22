@@ -1,5 +1,6 @@
 # Zpracování úkolů ze vstupního pohovoru neznámé společnosti
-Příklady vypracovány samostatně Jaroslavem Kučerou
+Příklady vypracovány samostatně Jaroslavem Kučerou. 
+V některých příkladech jsem ponechal ladící výpisy.
 
 ## Obecně
 - Během vypracování bude možné zadání i částečná řešení konzultovat se zástupci firmy.
