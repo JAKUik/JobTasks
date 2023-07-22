@@ -1,3 +1,4 @@
+# Úkol 2 - Prvočísla a palindromy
 """
 Připravte program, který vypíše první prvočíslo, které je větší než uživatelem zadaná hodnota a které je zároveň
 palindromem.
@@ -29,6 +30,7 @@ def next_prime_number(number):
         number += 2
 
 
+# Main program
 try:
     number = int(input("Zadej celé kladné minimálně dvojciferné číslo: "))
     if number < 10:

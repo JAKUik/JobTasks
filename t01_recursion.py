@@ -1,5 +1,5 @@
+# Úkol 1 - Rekurze:
 """
-### Úkol 1 - Rekurze:
 Napište funkci ``word_chain``, která na vstupu dostane libovolně velkou množinu slov a vrátí největší počet slov,
 které lze zřetězit jeden po druhém tak, že první písmeno druhého slova je stejné jako poslední písmeno prvního slova.
 Opakování slov není povoleno.
