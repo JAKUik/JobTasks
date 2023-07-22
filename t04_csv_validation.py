@@ -15,50 +15,66 @@ Error! 3 column(s) on line 185!
 Invalid price on line: 224
 """
 
-import csv
 
-
-class CSVReader:
+class TextFileReader:
     def __init__(self, filename, delimiter=';'):
         self.filename = filename
         self.delimiter = delimiter
         self.file = None
-        self.reader = None
-        self.row = None
-        self.row_number = 0
+        self.line = None
+        self.line_number = 0
 
     def open(self):
-        self.file = open(self.filename, 'r')
-        self.reader = csv.reader(self.file, delimiter=self.delimiter)
+        self.file = open(self.filename, 'r', encoding='utf-8')
+
+    def read_line(self):
+        self.line = self.file.readline()
+        self.line_number += 1
+        return self.line
 
     def validate(self):
-        xx = self.row
+        def check_price_format(price):
+            import re
+            pattern = r'^\-?\d+([.,]\d{1,2})?\s*(Kč|€)$'
+            match = re.match(pattern, price)
+            return bool(match)
+
+        r = self.line.split(self.delimiter)
+        if len(r) < 4:
+            return f"Error! {len(r)} column(s)"
+        if len(r[0].strip()) == 0:
+            return "Missing title"
+        if len(r[1].strip()) == 0:
+            return "Missing author"
+        if len(r[2].strip()) != 10 and len(r[2].strip()) != 13:
+            return "Invalid ISBN"
+        if len(r[3].strip()) == 0 or not check_price_format(r[3].strip()):
+            return "Invalid price"
         return None
 
-    def read_row(self):
-        try:
-            self.row = next(self.reader)
-        except StopIteration:
-            self.row = None
-        return self.row
-
     def close(self):
-        self.file.close()
+        if self.file:
+            self.file.close()
 
 
-reader = CSVReader('t04_library.csv')
+reader = TextFileReader('t04_library.csv')
 try:
+    reader.open()
     while True:
-        if reader.read_row() is None:
+        if not reader.read_line():
             break
+        # print(f"{reader.line_number} - {reader.line}", end="")
         validate = reader.validate()
         if validate is not None:
-            print(f"{validate} on line: {reader.row}")
+            print(f"{validate} on line: {reader.line_number}")
 
 except FileNotFoundError:
     print('Soubor nebyl nalezen')
 except PermissionError:
     print('Nemáte oprávnění ke čtení souboru')
-except csv.Error as e:
-    print(f'Chyba při čtení CSV souboru: {e}')
+finally:
+    reader.close()
+
+
+
 
